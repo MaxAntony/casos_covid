@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
-import { createInput } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +7,7 @@ import { createInput } from '@angular/compiler/src/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'test';
-  data = [];
+  title = 'Covid-19';
   dataformated = [];
   constructor(private dataService: DataService) {}
   ngOnInit() {
@@ -18,31 +16,27 @@ export class AppComponent implements OnInit {
   getData() {
     this.dataService.getData().subscribe(
       (res) => {
-        console.log(res);
-        this.data = res as any[];
-        this.dataformated = this.formatData(this.data);
+        this.dataformated = this.formatData(res as any[]);
       },
       (err) => {
-        console.log('ocurrio un eror');
+        console.log('ocurrio un error');
       }
     );
   }
 
   formatData(data) {
-    let ciudad = [];
+    const ciudad = [];
+
     for (const key in data) {
-      let cityName = key;
-      let deaths = 0;
-      let confirmed = 0;
-      let recovered = 0;
-      // BUG: solo se tiene que obtener el ultimo elemento del array para los casos actuales
-      for (const frame of data[key]) {
-        deaths = deaths + frame.deaths;
-        confirmed = confirmed + frame.confirmed;
-        recovered = confirmed + frame.recovered;
+      if (data.hasOwnProperty(key)) {
+        const cityName = key;
+        const deaths = data[key][data[key].length - 1].deaths;
+        const confirmed = data[key][data[key].length - 1].confirmed;
+        const recovered = data[key][data[key].length - 1].recovered;
+        ciudad.push({ cityName, deaths, confirmed, recovered });
       }
-      ciudad.push({ cityName, deaths, confirmed, recovered });
     }
+
     return ciudad;
   }
 }
