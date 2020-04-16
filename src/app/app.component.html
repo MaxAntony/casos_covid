@@ -1,26 +1,82 @@
 <nav class="navbar navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <h1 class="navbar-brand" href="#">Covid-19</h1>
   </div>
 </nav>
-<div class="container">
+
+<div class="container mt-3 mb-5">
   <div class="row">
     <div class="col">
-      <input type="date" name="" id="" />
+      <div class="card">
+        <div class="card-header">
+          <h5>Ingrese el pais y la fecha</h5>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Pais</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Ingrese el pais"
+                    [(ngModel)]="country"
+                    (ngModelChange)="countryChanged($event)"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="date-picker">Ingrese el dia</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="aaaa-mm-dd"
+                      name="dp"
+                      [(ngModel)]="today"
+                      (ngModelChange)="dateChanged($event)"
+                      ngbDatepicker
+                      #d="ngbDatepicker"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-secondary calendar"
+                        (click)="d.toggle()"
+                        type="button"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div *ngIf="dataformated" class="row">
-    <div *ngFor="let city of dataformated" class="col">
-      <div class="card m-4" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">{{ city.cityName }}</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Muertes: {{ city.deaths }}</li>
-          <li class="list-group-item">recuperados: {{ city.recovered }}</li>
-          <li class="list-group-item">confirmados: {{ city.confirmed }}</li>
-        </ul>
-      </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col chart">
+      <ngx-charts-bar-vertical
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="single"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [showDataLabel]="true"
+        [legendTitle]="'leyenda'"
+        (select)="onSelect($event)"
+      >
+      </ngx-charts-bar-vertical>
     </div>
   </div>
 </div>
