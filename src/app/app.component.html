@@ -1,21 +1,24 @@
-<nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <div class="container">
-      <div class="row">Covid-19</div>
-    </div>
-  </a>
+<nav class="navbar navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" href="#">Navbar</a>
+  </div>
 </nav>
 <div class="container">
+  <div class="row">
+    <div class="col">
+      <input type="date" name="" id="" />
+    </div>
+  </div>
   <div *ngIf="dataformated" class="row">
-    <div *ngFor="let ciudad of dataformated" class="col">
+    <div *ngFor="let city of dataformated" class="col">
       <div class="card m-4" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">{{ ciudad.cityName }}</h5>
+          <h5 class="card-title">{{ city.cityName }}</h5>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Muertes: {{ ciudad.deaths }}</li>
-          <li class="list-group-item">recuperados: {{ ciudad.recovered }}</li>
-          <li class="list-group-item">confirmados: {{ ciudad.confirmed }}</li>
+          <li class="list-group-item">Muertes: {{ city.deaths }}</li>
+          <li class="list-group-item">recuperados: {{ city.recovered }}</li>
+          <li class="list-group-item">confirmados: {{ city.confirmed }}</li>
         </ul>
       </div>
     </div>
