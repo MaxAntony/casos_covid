@@ -21,9 +21,16 @@
                     type="text"
                     class="form-control"
                     placeholder="Ingrese el pais"
+                    list="countries"
                     [(ngModel)]="country"
                     (ngModelChange)="countryChanged($event)"
                   />
+                  <datalist id="countries">
+                    <option
+                      *ngFor="let country of countries"
+                      value="{{ country }}"
+                    ></option>
+                  </datalist>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -66,7 +73,7 @@
             <ngx-charts-bar-vertical
               [view]="view"
               [scheme]="colorScheme"
-              [results]="single"
+              [results]="dataChart"
               [gradient]="gradient"
               [xAxis]="showXAxis"
               [yAxis]="showYAxis"
@@ -77,7 +84,7 @@
               [yAxisLabel]="yAxisLabel"
               [showDataLabel]="true"
               [legendTitle]="'leyenda'"
-              (select)="onSelect($event)"
+              (select)="onclickChart($event)"
             >
             </ngx-charts-bar-vertical>
           </div>

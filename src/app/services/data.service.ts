@@ -9,7 +9,7 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getData() {
-    return this.http.get(this.URL_API);
+  async getData() {
+    return await this.http.get(this.URL_API).toPromise();
   }
 }

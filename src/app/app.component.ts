@@ -13,9 +13,9 @@ export class AppComponent implements OnInit {
   country = 'Peru';
   // date
   today: NgbDateStruct;
-
+  // chart
+  dataChart = [];
   view: any[] = [600, 400];
-
   showXAxis = true;
   showYAxis = true;
   gradient = false;
@@ -24,31 +24,31 @@ export class AppComponent implements OnInit {
   xAxisLabel = 'Casos';
   showYAxisLabel = true;
   yAxisLabel = 'Personas';
-
   colorScheme = {
     domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB'],
   };
-
-  public single = [];
+  // input country suggestions
+  countries = [];
 
   constructor(private dataService: DataService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getToday();
-    this.getData();
-    // TODO: convertir el input de pais en desplegable y listar paises
+    const data = await this.getData();
+    this.getCountries(data);
+    this.formatData(data);
+    // TODO: mejorar el input, aqui una libreria interesante: https://www.npmjs.com/package/angular-ng-autocomplete
     // TODO: agregar funcionalidad de seleccionar fecha por rangos
   }
 
-  getData() {
-    this.dataService.getData().subscribe(
-      (res) => {
-        this.formatData(res as any[]);
-      },
-      (err) => {
-        console.log('ocurrio un error');
-      }
-    );
+  async getData() {
+    let data = {};
+    try {
+      data = await this.dataService.getData();
+    } catch (e) {
+      console.log(e);
+    }
+    return data;
   }
 
   formatData(data) {
@@ -73,22 +73,22 @@ export class AppComponent implements OnInit {
     }
 
     if (dayStatus) {
-      this.single = [
+      this.dataChart = [
         {
           name: 'Muertos',
-          value: dayStatus?.deaths,
+          value: dayStatus.deaths,
         },
         {
           name: 'Infectados',
-          value: dayStatus?.confirmed,
+          value: dayStatus.confirmed,
         },
         {
           name: 'Recuperados',
-          value: dayStatus?.recovered,
+          value: dayStatus.recovered,
         },
       ];
     } else {
-      this.single = [
+      this.dataChart = [
         {
           name: 'No hay datos',
           value: 0,
@@ -97,7 +97,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onSelect(e) {
+  onclickChart(e) {
     console.log(e);
   }
 
@@ -109,13 +109,21 @@ export class AppComponent implements OnInit {
       day: Number(date.getDate()) - 1,
     };
   }
-  countryChanged(e) {
-    this.getData();
+
+  async countryChanged(e) {
+    this.formatData(await this.getData());
   }
 
-  dateChanged(e) {
+  async dateChanged(e) {
     if (this.today && this.today.year && this.today.month && this.today.day) {
-      this.getData();
+      this.formatData(await this.getData());
+    }
+  }
+  getCountries(data) {
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        this.countries.push(key);
+      }
     }
   }
 }
